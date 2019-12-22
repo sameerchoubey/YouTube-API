@@ -16,31 +16,59 @@
 <body>
 
     <h1 class="text-center">Youtube API</h1>
-    <div class="alert alert-primary text-center" role="alert">
-        <p>Fetch Videos from YouTube</p>
-    </div <div class="container">
-    <div class="row" style="margin-bottom:5%">
+    <div class="alert alert-success text-center" role="alert">Fetch Videos from YouTube
+    </div>
+    <div class="container" style="margin-left:-0.5%">
+        <div class="row" style="margin-bottom:5%">
+            <!-- Form 1 -->
+            {% for i in content %}
+            <div class="col-md-6  mb-2" style="text-align: right">
+                <div style="display:inline-block;">
+                    <a href="https://www.youtube.com/watch?v={{i.video_id}}" target="_blank">
+                        <img src=" {{ i.thumbnail_url }}" height="200" width="325">
+                    </a>
+                    <br>
+                </div>
+            </div>
 
-        <!-- Form 1 -->
-        <div class="col-md-12" style="text-align: center">
-            <div style="display:inline-block;">
-                <!-- <p>Name:</p> -->
-                <div class="alert alert-info" role="alert">
-                    {{ m.title }}
+            <div class="col-md-6">
+                <div style="display:inline-block;">
+                    <a href="https://www.youtube.com/watch?v={{i.video_id}}" target="_blank">
+                        <h4>{{ i.video_title }}</h4>
+                    </a>
+                    <p>{{i.description}}</p>
+                    <p>Uploaded Date: {{i.published_date}}</p>
                 </div>
-                <!-- <br> -->
-                <img src="{{ m.thumbnail }}" height="400" width="400">
-                <br>
-                <div class="alert alert-info" role="alert">
-                    The current rating is: 200
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+    <div class=" container">
+        <div class="row">
+            <div class="col-md-12" style="text-align: center">
+                <div style="display:inline-block;" class="pagination">
+                    <span class="step-links">
+                        {% if content.has_previous %}
+                        <a class="btn btn-outline-info mb-4" href="?page=1">&laquo; first</a>
+                        <a class="btn btn-outline-info mb-4"
+                            href="?page={{ contacts.previous_page_number }}">previous</a>
+                        {% endif %}
+
+                        <span class="step-links btn btn-success">
+                            Page {{ content.number }} of {{ content.paginator.num_pages }}
+                        </span>
+
+                        {% if content.has_next %}
+                        <a class="btn btn-outline-info mb-4" href="?page={{ content.next_page_number }}">next</a>
+                        <a class="btn btn-outline-info mb-4" href="?page={{ content.paginator.num_pages }}">last
+                            &raquo;</a>
+                        {% endif %}
+                    </span>
                 </div>
-                <button class="btn btn-outline-success" name="button1">Vote</button>
             </div>
         </div>
-
     </div>
-    </div>
-
 
 
     <!-- Optional JavaScript -->

@@ -3,12 +3,14 @@ from django.http import HttpResponse
 from apiclient.discovery import build
 from django.core.exceptions import ObjectDoesNotExist
 from .models import main_db
+from django.core.paginator import Paginator
 import time
 import threading
 import random
 
 api_key = 'AIzaSyCJtkbrA7_U3SjJYHEAU5Ha0tZzOdsSqy8'
 keyword = 'Premier League'
+
 
 def fetch_from_youtube(keyword, api_key):
     while True:
@@ -50,7 +52,11 @@ t.daemon = True
 
 
 def index(request):
-    m = main_db.objects.get(id=random.randint(1, 50))
-    print(m.thumbnail_url)
-    m = {"thumbnail": str(m.thumbnail_url), "title": str(m.video_title)}
-    return render(request, 'index.html', {'m': m})
+    content = main_db.objects.order_by('-published_date')
+    paginator = Paginator(content, 5)
+    page = request.GET.get('page')
+    content = paginator.get_page(page)
+    context = {
+        'content': content
+    }
+    return render(request, 'index.html', context)
