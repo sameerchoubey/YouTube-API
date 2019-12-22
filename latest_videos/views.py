@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from apiclient.discovery import build
 from django.core.exceptions import ObjectDoesNotExist
 from .models import main_db
@@ -77,3 +77,12 @@ def index(request):
         'content': content
     }
     return render(request, 'index.html', context)
+
+
+# API Function that will returns data in JSON Format.
+def index_api(request):
+    content = main_db.objects.order_by('-published_date').values()
+    context = {
+        'content': list(content)
+    }
+    return JsonResponse(context)
