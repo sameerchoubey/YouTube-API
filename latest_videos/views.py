@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from apiclient.discovery import build
 from django.core.exceptions import ObjectDoesNotExist
 from .models import main_db
@@ -52,12 +52,9 @@ def fetch_from_youtube(keyword, api_key):
                                     thumbnail_url=v_thumb_url)
                     query.save()
         except:
-            print('ACTUAL STREAM AFTER THIS--------------------')
             list_index = list_index + 1
             list_index = list_index % 5
-            # print(list_index)
             api_key = api_key_list[list_index]
-            # print(api_key)
 
         time.sleep(5)
 
@@ -77,3 +74,12 @@ def index(request):
         'content': content
     }
     return render(request, 'index.html', context)
+
+
+# API Function that will returns data in JSON Format.
+def index_api(request):
+    content = main_db.objects.order_by('-published_date').values()
+    context = {
+        'content': list(content)
+    }
+    return JsonResponse(context)
